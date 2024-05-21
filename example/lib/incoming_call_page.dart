@@ -17,7 +17,7 @@ class _IncomingCallPageState extends State<IncomingCallPage> {
   final voIPKit = FlutterIOSVoIPKit.instance;
   var dummyCallId = '123456';
   var dummyCallerName = 'Dummy Tester';
-  Timer timeOutTimer;
+  late Timer timeOutTimer;
   bool isTalking = false;
 
   @override
@@ -43,7 +43,7 @@ class _IncomingCallPageState extends State<IncomingCallPage> {
 
       print('🎈 example: onDidRejectIncomingCall $uuid, $callerId');
       voIPKit.endCall();
-      timeOutTimer?.cancel();
+      timeOutTimer.cancel();
 
       setState(() {
         isTalking = false;
@@ -61,7 +61,7 @@ class _IncomingCallPageState extends State<IncomingCallPage> {
       print('🎈 example: onDidAcceptIncomingCall $uuid, $callerId');
       voIPKit.acceptIncomingCall(callerState: CallStateType.calling);
       voIPKit.callConnected();
-      timeOutTimer?.cancel();
+      timeOutTimer.cancel();
 
       setState(() {
         isTalking = true;
@@ -73,7 +73,7 @@ class _IncomingCallPageState extends State<IncomingCallPage> {
 
   @override
   void dispose() {
-    timeOutTimer?.cancel();
+    timeOutTimer.cancel();
     voIPKit.dispose();
     super.dispose();
   }
@@ -100,7 +100,7 @@ class _IncomingCallPageState extends State<IncomingCallPage> {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      FutureBuilder<String>(
+                      FutureBuilder(
                         future: voIPKit.getVoIPToken(),
                         builder: (context, snapshot) {
                           return GestureDetector(
@@ -109,7 +109,7 @@ class _IncomingCallPageState extends State<IncomingCallPage> {
                                 return;
                               }
 
-                              final data = ClipboardData(text: snapshot.data);
+                              final data = ClipboardData(text: snapshot.data!);
                               await Clipboard.setData(data);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
